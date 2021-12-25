@@ -1,11 +1,7 @@
 # Python
 from uuid import UUID
 from datetime import date, datetime
-from typing import (
-    Optional,
-    Dict,
-    List
-    )
+from typing import Optional
 
 # Pydantic
 from pydantic import (
@@ -55,7 +51,7 @@ class User(UserBase):
         example='2021-01-01'
         )
 
-# Tweets Model 
+# Tweets Model
 
 class Tweet(BaseModel):
     tweet_id: UUID = Field(

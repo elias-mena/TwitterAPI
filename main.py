@@ -13,6 +13,7 @@ from fastapi import (
     Body
     )
 import uvicorn # Server where the app runs
+
 # Models
 from models import(
     UserBase,
@@ -25,14 +26,9 @@ app = FastAPI()
 
 # Path Operations
 
-## Home
-
-app.get(path="/")
-def home()-> Dict[str, str]:
-    return {"Twitter API":"Working!"}
-
 ## Users
 
+### Register a user
 @app.post(
     path="/singup",
     response_model=User,
@@ -43,7 +39,7 @@ def home()-> Dict[str, str]:
 def singup(user: User) -> User:
     pass
 
-
+### Login a user
 @app.post(
     path="/login",
     response_model=User,
@@ -54,7 +50,7 @@ def singup(user: User) -> User:
 def login(user: User) -> User:
     pass
 
-
+### Show all users
 @app.get(
     path="/users",
     response_model=List[User],
@@ -65,7 +61,7 @@ def login(user: User) -> User:
 def show_all_users() -> List[User]:
     pass
 
-
+### Show a user
 @app.get(
     path="/users/{user_id}",
     response_model=User,
@@ -81,10 +77,10 @@ def show_user(
         description='The ID of the user to retrieve',
         example=1
         )
-    )-> User:
+)-> User:
     pass
 
-
+### Delete a user
 @app.delete(
     path="/users/{user_id}/delete",
     response_model=User,
@@ -97,12 +93,13 @@ def delete_user(
         ...,
         gt=0,
         title='User ID',
-        description='The ID of the user to retrieve',
+        description='The ID of the user to delete',
         example=1
         )
-    )-> User:
+)-> User:
     pass
 
+### Update a user
 @app.put(
     path="/users/{user_id}/update",
     response_model=User,
@@ -115,10 +112,83 @@ def update_user(
         ...,
         gt=0,
         title='User ID',
-        description='The ID of the user to retrieve',
+        description='The ID of the user to update',
         example=1
         )
-    )-> User:
+)-> User:
+    pass
+
+## Tweets
+
+### Show  all tweets
+@app.get(
+    path="/",
+    response_model=List[Tweet],
+    status_code=status.HTTP_200_OK,
+    summary="Show all tweets",
+    tags=["Tweets"]
+)
+def home() -> List[Tweet]:
+    return {"Twitter API": "Working!"}
+
+### Post a tweet
+@app.post(
+    path="/post",
+    response_model=Tweet,
+    status_code=status.HTTP_201_CREATED,
+    summary="Post a tweet",
+    tags=["Tweets"]
+)
+def post() -> Tweet:
+    pass
+
+### Show a tweet
+@app.get(
+    path="/tweets/{tweet_id}",
+    response_model=Tweet,
+    status_code=status.HTTP_200_OK,
+    summary="Show a tweet",
+    tags=["Tweets"]
+)
+def show_a_tweet()-> Tweet:
+    pass
+
+### Delete a tweet
+@app.delete(
+    path="/tweets/{tweet_id}/delete",
+    response_model=Tweet,
+    status_code=status.HTTP_200_OK,
+    summary="Delete a tweet",
+    tags=["Tweets"]
+)
+def delete_a_tweet(
+        id: int = Path(
+        ...,
+        gt=0,
+        title='Tweet ID',
+        description='The ID of the tweet to delete',
+        example=1
+        )
+)-> Tweet:
+    pass
+
+### Update a tweet
+@app.put(
+    path="/tweets/{tweet_id}/update",
+    response_model=Tweet,
+    status_code=status.HTTP_200_OK,
+    summary="Update a tweet",
+    tags=["Tweets"]
+)
+def update_a_tweet(
+        id: int = Path(
+            ...,
+            gt=0,
+            title='Tweet ID',
+            description='The ID of the tweet to update',
+            example=1
+            )
+)-> Tweet:
     pass
 
 if __name__ == "__main__":
