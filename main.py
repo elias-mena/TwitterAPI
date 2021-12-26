@@ -1,4 +1,5 @@
 # Python
+import json
 from uuid import UUID
 from typing import (
     Dict,
@@ -39,23 +40,32 @@ app = FastAPI()
     summary="Register a User",
     tags=["Users"]
     )
-def signup(user: UserRegister) -> User:
+def signup(user: UserRegister = Body(...)) -> User:
     """
-    Signup
+    # Signup
 
     This path operation register a user in the app
 
-    Parameters:
+    ## Parameters:
         -Request body parameter
             - user: UserRegister
 
-    Returns a json with the basic user information:
+    ## Returns a json with the basic user information:
         - user_id: UUID
         - email: Emailsrt
         - first_name: str
         - last_name: str
-        - birth_date: str
+        - birth_date: date
     """
+    with open("users.json", "r+", encoding="utf-8") as f:
+        results = json.load(f) # load the list of jsons
+        user_dict = user.dict() # convert the user (body) to a dictionary
+        user_dict["user_id"] = str(user_dict["user_id"]) # convert the uuid to string
+        user_dict["birth_date"] = str(user_dict["birth_date"]) # convert date to string
+        results.append(user_dict)
+        f.seek(0) # move to the first byte of the file
+        json.dump(results,f) # save the changes in the json
+    return user
 
 ### Login a user
 @app.post(
