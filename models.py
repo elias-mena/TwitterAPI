@@ -14,10 +14,7 @@ from pydantic import (
 
 
 class UserBase(BaseModel):
-    user_id: UUID = Field(
-        ...,
-        alias="id"
-    )
+    user_id: UUID = Field(...)
     email: EmailStr = Field(
         ...,
         example="Jhon@doe.com"
@@ -70,14 +67,15 @@ class Tweet(BaseModel):
     content: str = Field(
         ...,
         min_length=1,
-        max_length=256
+        max_length=256,
+        example='This is a tweet!'
     )
     created_at: datetime = Field(
         default=datetime.now(),
         title='Creation date',
         example='2020-01-01T00:00:00Z'
     )
-    update_at: Optional[datetime] = Field(
+    updated_at: Optional[datetime] = Field(
         default=None,
         title='Last update date',
         example='2020-01-01T00:00:00Z'
