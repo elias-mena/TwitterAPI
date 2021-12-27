@@ -60,10 +60,7 @@ class UserRegister(User, UserLogin):
 
 
 class Tweet(BaseModel):
-    tweet_id: UUID = Field(
-        ...,
-        alias="Tweet id"
-    )
+    tweet_id: UUID = Field(...)
     content: str = Field(
         ...,
         min_length=1,
