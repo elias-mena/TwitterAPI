@@ -28,6 +28,7 @@ from models import(
 
 app = FastAPI()
 
+
 # Path Operations
 
 ## Users
@@ -135,7 +136,32 @@ def show_user(
         example=1
         )
 )-> User:
-    pass
+    """
+    Show a User
+
+    This path operation show if a person exist in the app
+
+    Parameters:
+        - user_id: UUID
+
+    Returns a json with user data:
+        - user_id: UUID
+        - email: Emailstr
+        - first_name: str
+        - last_name: str
+        - birth_date: datetime
+    """
+    with open("users.json", "r+", encoding="utf-8") as f: 
+        results = json.loads(f.read())
+        id = str(user_id)
+    for data in results:
+        if data["user_id"] == id:
+            return data
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"¡This user_id doesn't exist!"
+        )
 
 ### Delete a user
 @app.delete(
@@ -154,7 +180,36 @@ def delete_user(
         example=1
         )
 )-> User:
-    pass
+    """
+    Delete a User
+
+    This path operation delete a user in the app
+
+    Parameters:
+        - user_id: UUID
+
+    Returns a json with deleted user data:
+        - user_id: UUID
+        - email: Emailstr
+        - first_name: str
+        - last_name: str
+        - birth_date: datetime
+    """
+    with open("users.json", "r+", encoding="utf-8") as f: 
+        results = json.loads(f.read())
+        id = str(user_id)
+    for data in results:
+        if data["user_id"] == id:
+            results.remove(data)
+            with open("users.json", "w", encoding="utf-8") as f:
+                f.seek(0)
+                f.write(json.dumps(results))
+            return data
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="¡This user_id doesn't exist!"
+        )
 
 ### Update a user
 @app.put(
@@ -173,7 +228,37 @@ def update_user(
         example=1
         )
 )-> User:
-    pass
+    """
+    Update User
+
+    This path operation update a user information in the app and save in the database
+
+    Parameters:
+    - user_id: UUID
+    - Request body parameter:
+        - **user: User** -> A user model with user_id, email, first name, last name, birth date and password
+
+    Returns a user model with user_id, email, first_name, last_name and birth_date
+    """
+    user_id = str(user_id)
+    user_dict = user.dict()
+    user_dict["user_id"] = str(user_dict["user_id"])
+    user_dict["birth_date"] = str(user_dict["birth_date"])
+    with open("users.json", "r+", encoding="utf-8") as f: 
+        results = json.loads(f.read())
+    for user in results:
+        if user["user_id"] == user_id:
+            results[results.index(user)] = user_dict
+            with open("users.json", "w", encoding="utf-8") as f:
+                f.seek(0)
+                f.write(json.dumps(results))
+            return user
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="¡This user_id doesn't exist!"
+        )
+
 
 ## Tweets
 
@@ -265,7 +350,32 @@ def post(tweet: Tweet = Body(...)) -> Tweet:
     tags=["Tweets"]
 )
 def show_a_tweet()-> Tweet:
-    pass
+    """
+    Show a Tweet
+
+    This path operation show if a tweet exist in the app
+
+    Parameters:
+        - tweet_id: UUID
+
+    Returns a json with tweet data:
+        - tweet_id: UUID
+        - content: str
+        - created_at: datetime
+        - updated_at: Optional[datetime]
+        - by: User
+    """
+    with open("tweets.json", "r+", encoding="utf-8") as f: 
+        results = json.loads(f.read())
+        id = str(tweet_id)
+    for data in results:
+        if data["tweet_id"] == id:
+            return data
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"¡This tweet_id doesn't exist!"
+        )
 
 ### Delete a tweet
 @app.delete(
@@ -284,7 +394,36 @@ def delete_a_tweet(
         example=1
         )
 )-> Tweet:
-    pass
+    """
+    Delete a Tweet
+
+    This path operation delete a tweet in the app
+
+    Parameters:
+        - tweet_id: UUID
+
+    Returns a json with deleted tweet data:
+        - tweet_id: UUID
+        - content: str
+        - created_at: datetime
+        - updated_at: Optional[datetime]
+        - by: User
+    """
+    with open("tweets.json", "r+", encoding="utf-8") as f: 
+        results = json.loads(f.read())
+        id = str(tweet_id)
+    for data in results:
+        if data["tweet_id"] == id:
+            results.remove(data)
+            with open("tweets.json", "w", encoding="utf-8") as f:
+                f.seek(0)
+                f.write(json.dumps(results))
+            return data
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="¡This tweet_id doesn't exist!"
+        )
 
 ### Update a tweet
 @app.put(
@@ -303,7 +442,42 @@ def update_a_tweet(
             example=1
             )
 )-> Tweet:
-    pass
+    """
+    Update Tweet
+
+    This path operation update a tweet information in the app and save in the database
+
+    Parameters:
+    - tweet_id: UUID
+    - contet:str
+
+    Returns a json with:
+        - tweet_id: UUID
+        - content: str 
+        - created_at: datetime 
+        - updated_at: datetime
+        - by: user: User
+    """
+    tweet_id = str(tweet_id)
+    # tweet_dict = tweet.dict()
+    # tweet_dict["tweet_id"] = str(tweet_dict["tweet_id"])
+    # tweet_dict["birth_date"] = str(tweet_dict["birth_date"])
+    with open("tweets.json", "r+", encoding="utf-8") as f: 
+        results = json.loads(f.read())
+    for tweet in results:
+        if tweet["tweet_id"] == tweet_id:
+            tweet['content'] = content
+            tweet['updated_at'] = str(datetime.now())
+            print(tweet)
+            with open("tweets.json", "w", encoding="utf-8") as f:
+                f.seek(0)
+                f.write(json.dumps(results))
+            return tweet
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="¡This tweet_id doesn't exist!"
+        )
 
 if __name__ == "__main__":
     uvicorn.run('main:app', host="127.0.0.1", port=8000, reload=True)
