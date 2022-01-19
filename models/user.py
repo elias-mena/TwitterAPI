@@ -1,5 +1,4 @@
 # Python
-from uuid import UUID
 from datetime import date, datetime
 from typing import Optional
 
@@ -12,9 +11,8 @@ from pydantic import (
 
 # User Models
 
-
 class UserBase(BaseModel):
-    user_id: UUID = Field(...)
+    #id:
     email: EmailStr = Field(
         ...,
         example="Jhon@doe.com"
@@ -31,6 +29,11 @@ class UserLogin(UserBase):
 
 
 class User(UserBase):
+    user_id : int = Field(
+        ...,
+        title='User Identification Number',
+        gt=1,
+        example="123456789123")
     first_name: str = Field(
         ...,
         title='First name',
@@ -54,30 +57,3 @@ class User(UserBase):
 
 class UserRegister(User, UserLogin):
     pass
-
-
-# Tweets Model
-
-
-class Tweet(BaseModel):
-    tweet_id: UUID = Field(...)
-    content: str = Field(
-        ...,
-        min_length=1,
-        max_length=256,
-        example='This is a tweet!'
-    )
-    created_at: datetime = Field(
-        default=datetime.now(),
-        title='Creation date',
-        example='2020-01-01T00:00:00Z'
-    )
-    updated_at: Optional[datetime] = Field(
-        default=None,
-        title='Last update date',
-        example='2020-01-01T00:00:00Z'
-    )
-    by: User = Field(
-        ...,
-        title='User who created the tweet'
-    )
