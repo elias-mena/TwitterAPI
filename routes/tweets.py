@@ -4,7 +4,7 @@ from typing import List
 # Fast Api
 from fastapi import (
     APIRouter,
-    FastAPI, # Class that contains the app
+    FastAPI,
     status,
     Path,
     Body
@@ -16,7 +16,7 @@ from models.user import User
 # Tweet Model
 from models.tweet import Tweet
 
-# Data base conection
+# Data base connection
 from config.db import db
 
 # Classes to serialize Bsons to Dicts and Lists
@@ -25,12 +25,12 @@ from squemas.squemas import serializeDict, serializeList
 # To manage the Bsons ids
 from bson import ObjectId
 
-tweets = APIRouter()
+tweets_router = APIRouter()
 
 ## Tweets
 
 ### Show  all tweets
-@tweets.get(
+@tweets_router.get(
     path="/",
     response_model=List[Tweet],
     status_code=status.HTTP_200_OK,
@@ -57,7 +57,7 @@ def home() -> List[Tweet]:
 
 
 ### Post a tweet
-@tweets.post(
+@tweets_router.post(
     path="/post",
     response_model=Tweet,
     status_code=status.HTTP_201_CREATED,
@@ -84,8 +84,8 @@ def post(tweet: Tweet = Body(...)) -> Tweet:
     pass
 
 ### Show a tweet
-@tweets.get(
-    path="/tweets/{tweet_id}",
+@tweets_router.get(
+    path="/{tweet_id}",
     response_model=Tweet,
     status_code=status.HTTP_200_OK,
     summary="Show a tweet",
@@ -93,14 +93,14 @@ def post(tweet: Tweet = Body(...)) -> Tweet:
 )
 def show_a_tweet()-> Tweet:
     """
-    Show a Tweet
+    # Show a Tweet
 
     This path operation show if a tweet exist in the app
 
-    Parameters:
+    ## Parameters:
         - tweet_id: UUID
 
-    Returns a json with tweet data:
+    ## Returns a json with tweet data:
         - tweet_id: UUID
         - content: str
         - created_at: datetime
@@ -110,8 +110,8 @@ def show_a_tweet()-> Tweet:
     pass
 
 ### Delete a tweet
-@tweets.delete(
-    path="/tweets/{tweet_id}/delete",
+@tweets_router.delete(
+    path="/{tweet_id}/delete",
     response_model=Tweet,
     status_code=status.HTTP_200_OK,
     summary="Delete a tweet",
@@ -127,14 +127,14 @@ def delete_a_tweet(
         )
 )-> Tweet:
     """
-    Delete a Tweet
+    # Delete a Tweet
 
     This path operation delete a tweet in the app
 
-    Parameters:
+    ## Parameters:
         - tweet_id: UUID
 
-    Returns a json with deleted tweet data:
+    ## Returns a json with deleted tweet data:
         - tweet_id: UUID
         - content: str
         - created_at: datetime
@@ -144,8 +144,8 @@ def delete_a_tweet(
 
 
 ### Update a tweet
-@tweets.put(
-    path="/tweets/{tweet_id}/update",
+@tweets_router.put(
+    path="/{tweet_id}/update",
     response_model=Tweet,
     status_code=status.HTTP_200_OK,
     summary="Update a tweet",
@@ -161,18 +161,18 @@ def update_a_tweet(
             )
 )-> Tweet:
     """
-    Update Tweet
+    # Update Tweet
 
     This path operation update a tweet information in the app and save in the database
 
-    Parameters:
-    - tweet_id: UUID
-    - contet:str
-
-    Returns a json with:
+    ## Parameters:
         - tweet_id: UUID
-        - content: str 
-        - created_at: datetime 
+        - contet:str
+
+    ## Returns a json with:
+        - tweet_id: UUID
+        - content: str
+        - created_at: datetime
         - updated_at: datetime
         - by: user: User
     """
