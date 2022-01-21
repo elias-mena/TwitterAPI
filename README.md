@@ -2,6 +2,8 @@
 
 Backend App using FastAPI ⚡ and MongoDB 🍃
 
+Look in the tags if you want the app without mongo, juts using JSON
+
 
 ## Database Configuration
 
@@ -20,3 +22,4 @@ Backend App using FastAPI ⚡ and MongoDB 🍃
 - Go to [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 
 ---
+
