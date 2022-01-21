@@ -1,0 +1,14 @@
+{
+    "_id": "61ea2062e623ff2f1d7b54fb",
+    "created_at": "2020-01-01T00:00:00",
+    "updated_at": "2020-01-01T00:00:00",
+    "content": "This is a tweet!",
+    "by": {
+      "_id": "61ea2043e623ff2f1d7b54f5",
+      "email": "Jhon@doe.com",
+      "user_id": "123456789123",
+      "first_name": "John",
+      "last_name": "Doe",
+      "birth_date": "2021-01-01"
+    }
+  }

@@ -45,6 +45,7 @@ def show_all_users():
         -
 
     ## Returns a json list with all users in the app, with the following keys:
+        - _id: str
         - user_id: int
         - email: Emailstr
         - first_name: str
@@ -52,6 +53,7 @@ def show_all_users():
         - birth_date: date
     """
     return serializeList(db.users.find())
+
 
 ## Show a user
 @users_router.get(
@@ -80,6 +82,7 @@ def show_user(
         - user_id: int
 
     ## Returns a json with user data:
+        - _id: str
         - user_id: int
         - email: Emailstr
         - first_name: str
@@ -94,6 +97,7 @@ def show_user(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"¡Doest not exist a user with that identification number!"
         )
+
 
 ## Delete a user
 @users_router.delete(
@@ -122,6 +126,7 @@ def delete_user(
         - user_id: int
 
     ## Returns a json with deleted user data:
+        - _id: str
         - user_id: int
         - email: Emailstr
         - first_name: str
@@ -136,6 +141,7 @@ def delete_user(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"¡Doest not exist a user with that identification number!"
         )
+
 
 ## Update a user
 @users_router.put(
@@ -167,6 +173,7 @@ def update_user(
             - **user: User
 
     ## Returns a json with user data:
+        - _id: str
         - user_id: int
         - email: Emailstr
         - password: str
@@ -205,10 +212,9 @@ def update_user(
     del user["user_id"] # It never changes
     user = {key:value for (key,value) in user.items() if value != db_user[key]}
 
-    # Filter and set for the update
+    # Filter and set for the Mongo update
     filtr = {"user_id": user_id }
     st = {"$set": user}
-
     db.users.update_one(filtr,st)
 
     return serializeDict(db.users.find_one({"user_id": user_id }))

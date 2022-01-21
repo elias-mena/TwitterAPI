@@ -1,6 +1,8 @@
 # Python
 from datetime import date, datetime
 from typing import Optional
+# To manage the Bsons ids
+from bson import ObjectId
 
 # Pydantic
 from pydantic import (
@@ -12,7 +14,11 @@ from pydantic import (
 # User Models
 
 class UserBase(BaseModel):
-    #id:
+    id : Optional[str] = Field(
+        title='Mongo ObjectId',
+        example=f'{ObjectId()}',
+        alias="_id"
+        )
     email: EmailStr = Field(
         ...,
         example="Jhon@doe.com"
@@ -56,6 +62,5 @@ class User(UserBase):
         example='2021-01-01'
         )
 
-
-class UserRegister(User, UserLogin):
+class UserRegister(UserLogin,User):
     pass

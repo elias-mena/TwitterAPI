@@ -24,6 +24,8 @@ from squemas.squemas import serializeDict, serializeList
 # Algorithm to encript the password
 from passlib.hash import sha256_crypt
 
+# To manage the Bsons ids
+from bson import ObjectId
 
 auth_router = APIRouter()
 
@@ -62,9 +64,12 @@ def signup(user: UserRegister = Body(...)):
             # Casting data
             user["birth_date"] = str(user["birth_date"]) # date to string
             user["password"] = sha256_crypt.hash(user["password"]) # encript password
+            del user['id']
+            user['_id'] = str(ObjectId())
+            _id = user['_id']
 
             # Inserting and returning the user by id (Mongo id)
-            _id = db.users.insert_one(user).inserted_id
+            db.users.insert_one(user)
             return serializeDict(db.users.find_one({"_id": _id}))
         else:
             raise HTTPException(
