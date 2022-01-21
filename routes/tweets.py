@@ -23,7 +23,7 @@ from models.tweet import Tweet
 from config.db import db
 
 # Classes to serialize Bsons to Dicts and Lists
-from squemas.squemas import serializeDict, serializeList
+from schemas.schemas import serializeDict, serializeList
 
 # To manage the Bsons ids
 from bson import ObjectId

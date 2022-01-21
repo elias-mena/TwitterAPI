@@ -19,7 +19,7 @@ from models.user import(
 from config.db import db
 
 # Functions to serialize Bsons to Dicts and Lists
-from squemas.squemas import serializeDict, serializeList
+from schemas.schemas import serializeDict, serializeList
 
 # Algorithm to encript the password
 from passlib.hash import sha256_crypt
@@ -91,4 +91,25 @@ def signup(user: UserRegister = Body(...)):
     tags=["Auth"]
     )
 def login(user: UserLogin = Body(...)) -> User:
-    pass
+
+    user = user.dict()
+    # Searching in the db by email
+    db_user = db.users.find_one({"email": user["email"] })
+
+    # Confirming if the email is registered
+    if db_user is not None:
+        db_user = serializeDict(db_user) # Bson to dictionary
+
+        if sha256_crypt.verify(user["password"], db_user["password"]): # Compares (password,hash)
+            return db_user
+
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail='Password does not match'
+                )
+
+    raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail='Does not exists a user with that email'
+                )

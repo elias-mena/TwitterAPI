@@ -18,7 +18,7 @@ from models.user import User, UserRegister
 from config.db import db
 
 # Functions to serialize Bsons to Dicts and Lists
-from squemas.squemas import serializeDict, serializeList
+from schemas.schemas import serializeDict, serializeList
 
 # Algorithm to encript the password
 from passlib.hash import sha256_crypt

@@ -1,6 +1,7 @@
 # Python
 from datetime import date, datetime
 from typing import Optional
+
 # To manage the Bsons ids
 from bson import ObjectId
 
